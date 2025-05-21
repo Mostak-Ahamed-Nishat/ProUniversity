@@ -6,7 +6,9 @@
   "description": "A comprehensive university management system built with Node.js, TypeScript, and Express. Features include student management, course registration, faculty administration, academic scheduling, and grade management. The system uses MongoDB for data storage and provides RESTful APIs for seamless integration.",
   "scripts": {
     "start:prod": "node ./dist/server.js",
-    "start:dev": "ts-node-dev --respawn --transpile-only src/server.ts"
+    "start:dev": "ts-node-dev --respawn --transpile-only src/server.ts",
+    "build": "tsc",
+    "build:watch": "tsc --watch"
   },
   "keywords": [
     "university",

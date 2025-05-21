@@ -27,8 +27,4 @@ app.use((req: Request, res: Response) => {
   });
 });
 
-app.listen(4000, () => {
-  console.log(`Application running on http://localhost:4000`);
-});
-
 export default app;
