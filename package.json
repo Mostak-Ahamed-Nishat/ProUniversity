@@ -1,0 +1,38 @@
+{
+  "name": "prouniversity",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Md Mostak Ahamed",
+  "description": "A comprehensive university management system built with Node.js, TypeScript, and Express. Features include student management, course registration, faculty administration, academic scheduling, and grade management. The system uses MongoDB for data storage and provides RESTful APIs for seamless integration.",
+  "scripts": {
+    "start:prod": "node ./dist/server.js",
+    "start:dev": "ts-node-dev --respawn --transpile-only src/server.ts"
+  },
+  "keywords": [
+    "university",
+    "management",
+    "typescript",
+    "node",
+    "express",
+    "mongodb",
+    "nodejs_project",
+    "nodejs_backed_project",
+    "JWT_Project"
+  ],
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "mongoose": "^8.15.0"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.18",
+    "@types/express": "^5.0.2",
+    "@types/mongoose": "^5.11.96",
+    "@types/node": "^22.15.21",
+    "nodemon": "^3.1.10",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.8.3"
+  }
+}
