@@ -1,12 +1,12 @@
 import { Schema, model } from "mongoose";
 import {
-  GuardianInterface,
-  LocalGuardianInterface,
-  StudentInterface,
-  UserNameInterface,
+  TGuardian,
+  TLocalGuardian,
+  TStudent,
+  TUserName,
 } from "./student.interface";
 
-export const userNameSchema = new Schema<UserNameInterface>({
+export const userNameSchema = new Schema<TUserName>({
   firstName: {
     type: String,
     required: true,
@@ -19,7 +19,7 @@ export const userNameSchema = new Schema<UserNameInterface>({
   },
 });
 
-export const guardianSchema = new Schema<GuardianInterface>({
+export const guardianSchema = new Schema<TGuardian>({
   fatherName: {
     required: true,
     type: String,
@@ -46,7 +46,7 @@ export const guardianSchema = new Schema<GuardianInterface>({
   },
 });
 
-export const localGuardianSchema = new Schema<LocalGuardianInterface>({
+export const localGuardianSchema = new Schema<TLocalGuardian>({
   name: {
     required: true,
     type: String,
@@ -65,9 +65,10 @@ export const localGuardianSchema = new Schema<LocalGuardianInterface>({
   },
 });
 
-const studentSchema = new Schema<StudentInterface>(
+const studentSchema = new Schema<TStudent>(
   {
     name: userNameSchema,
+
     gender: {
       type: String,
       enum: ["male", "female", "other"],
@@ -77,10 +78,6 @@ const studentSchema = new Schema<StudentInterface>(
     dateOfBirth: {
       type: Schema.Types.Date,
       required: true,
-      validate: {
-        validator: (value: Date) => value instanceof Date && value < new Date(),
-        message: "Date of birth must be in the past",
-      },
     },
 
     email: {
@@ -89,34 +86,16 @@ const studentSchema = new Schema<StudentInterface>(
       unique: true,
       lowercase: true,
       trim: true,
-      validate: {
-        validator: (value: string) => {
-          return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-        },
-        message: "Invalid email format",
-      },
     },
 
     contactNo: {
       type: String,
       required: true,
-      validate: {
-        validator: (value: string) => {
-          return /^\+?\d{10,15}$/.test(value);
-        },
-        message: "Invalid contact number",
-      },
     },
 
     emergencyContactNo: {
       type: String,
       required: true,
-      validate: {
-        validator: (value: string) => {
-          return /^\+?\d{10,15}$/.test(value);
-        },
-        message: "Invalid emergency contact number",
-      },
     },
 
     bloodGroup: {
@@ -142,13 +121,8 @@ const studentSchema = new Schema<StudentInterface>(
     localGuardian: localGuardianSchema,
     profileImg: {
       type: String,
-      validate: {
-        validator: (value: string) => {
-          return /^https?:\/\/.+\.(jpg|jpeg|png|gif)$/i.test(value);
-        },
-        message: "Invalid image URL format",
-      },
     },
+
     isActive: {
       type: String,
       enum: ["active", "blocked"],
@@ -165,5 +139,5 @@ const studentSchema = new Schema<StudentInterface>(
 studentSchema.index({ email: 1 }, { unique: true });
 studentSchema.index({ "name.firstName": 1, "name.lastName": 1 });
 
-const Student = model<StudentInterface>("Student", studentSchema);
+const Student = model<TStudent>("Student", studentSchema);
 export default Student;

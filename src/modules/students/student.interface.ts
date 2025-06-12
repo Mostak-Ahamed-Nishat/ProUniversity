@@ -1,4 +1,4 @@
-export type GuardianInterface = {
+export type TGuardian = {
   fatherName: string;
   fatherOccupation: string;
   fatherContactNo: string;
@@ -7,22 +7,22 @@ export type GuardianInterface = {
   motherContactNo: string;
 };
 
-export type UserNameInterface = {
+export type TUserName = {
   firstName: string;
   middleName: string;
   lastName: string;
 };
 
-export type LocalGuardianInterface = {
+export type TLocalGuardian = {
   name: string;
   occupation: string;
   contact: string;
   address: string;
 };
 
-export interface StudentInterface {
+export interface TStudent {
   id: string;
-  name: UserNameInterface;
+  name: TUserName;
   email: string;
   gender: "male" | "female";
   dateOfBirth: string;
@@ -31,8 +31,8 @@ export interface StudentInterface {
   bloodGroup?: "A+" | "A-" | "B+" | "B-" | "AB+" | "AB-" | "O+" | "O-";
   presentAddress: string;
   permanentAddress: string;
-  guardian: GuardianInterface;
-  localGuardian: LocalGuardianInterface;
+  guardian: TLocalGuardian;
+  localGuardian: TLocalGuardian;
   profileImage?: string;
   isActive: "active" | "blocked";
 }

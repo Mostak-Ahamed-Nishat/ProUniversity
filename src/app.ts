@@ -1,5 +1,6 @@
 import express, { Application, Request, Response } from "express";
 import cors from "cors";
+import { StudentRoutes } from "./modules/students/student.route";
 
 const app: Application = express();
 
@@ -12,6 +13,9 @@ app.use(express.urlencoded({ extended: true }));
 app.get("/", (req: Request, res: Response) => {
   res.send("Welcome to ProUniversity Management System!");
 });
+
+//Applications Routes
+app.use("/api/v1/students", StudentRoutes);
 
 // Handle Not Found Route
 app.use((req: Request, res: Response) => {
