@@ -68,7 +68,10 @@ export const localGuardianSchema = new Schema<TLocalGuardian>({
 const studentSchema = new Schema<TStudent>(
   {
     name: userNameSchema,
-
+    id: {
+      type: String,
+      required: true,
+    },
     gender: {
       type: String,
       enum: ["male", "female", "other"],
