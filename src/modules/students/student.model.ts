@@ -149,8 +149,16 @@ const studentSchema = new Schema<TStudent, TStudentModel, TStudentMethods>(
   {
     timestamps: true,
     versionKey: false,
+    toJSON: { virtuals: true },
   }
 );
+
+//Mongoose virtual
+studentSchema.virtual("fullName").get(function (this: TStudent) {
+  return `${
+    this.name.firstName
+  } ${this.name.middleName || ""} ${this.name.lastName}`;
+});
 
 //Custom instance method for checking if the user already exists
 studentSchema.methods.isUserExist = async function (
