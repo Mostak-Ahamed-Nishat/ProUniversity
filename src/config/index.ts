@@ -7,6 +7,7 @@ interface Config {
   PORT: number;
   DATABASE_URL: string;
   NODE_ENV: string;
+  SALT_ROUNDS: number;
 }
 
 function getEnvVar(name: string, required = true): string {
@@ -21,6 +22,7 @@ const config: Config = {
   PORT: Number(getEnvVar("PORT")),
   DATABASE_URL: getEnvVar("DATABASE_URL"),
   NODE_ENV: getEnvVar("NODE_ENV", false) || "development",
+  SALT_ROUNDS: process.env.SALT_ROUNDS,
 };
 
 export default config;

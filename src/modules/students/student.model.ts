@@ -3,8 +3,13 @@ import {
   TGuardian,
   TLocalGuardian,
   TStudent,
+  TStudentMethods,
+  TStudentModel,
   TUserName,
 } from "./student.interface";
+
+import bcrypt from "bcrypt";
+import config from "../../config";
 
 export const userNameSchema = new Schema<TUserName>({
   firstName: {
@@ -55,7 +60,7 @@ export const localGuardianSchema = new Schema<TLocalGuardian>({
     type: String,
     required: true,
   },
-  contact: {
+  contactNo: {
     type: String,
     required: true,
   },
@@ -65,10 +70,14 @@ export const localGuardianSchema = new Schema<TLocalGuardian>({
   },
 });
 
-const studentSchema = new Schema<TStudent>(
+const studentSchema = new Schema<TStudent, TStudentModel, TStudentMethods>(
   {
     name: userNameSchema,
     id: {
+      type: String,
+      required: true,
+    },
+    password: {
       type: String,
       required: true,
     },
@@ -91,7 +100,8 @@ const studentSchema = new Schema<TStudent>(
       trim: true,
     },
 
-    contactNo: {
+    contactNumber: {
+      // Changed from contactNo to contactNumber
       type: String,
       required: true,
     },
@@ -131,6 +141,10 @@ const studentSchema = new Schema<TStudent>(
       enum: ["active", "blocked"],
       default: "active",
     },
+    isDeleted: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,
@@ -138,9 +152,35 @@ const studentSchema = new Schema<TStudent>(
   }
 );
 
-// Create indexes for frequently queried fields
-studentSchema.index({ email: 1 }, { unique: true });
-studentSchema.index({ "name.firstName": 1, "name.lastName": 1 });
+//Custom instance method for checking if the user already exists
+studentSchema.methods.isUserExist = async function (
+  id: string
+): Promise<TStudent | null> {
+  return await Student.findOne({ id });
+};
 
-const Student = model<TStudent>("Student", studentSchema);
+//Pre save middleware
+studentSchema.pre("save", async function (next) {
+  const user = this;
+  user.password = await bcrypt.hash(user.password, Number(config.SALT_ROUNDS));
+  next();
+});
+
+//Query middleware to remove password from the response
+studentSchema.pre("find", function (next) {
+  this.find({ isDeleted: { $ne: true } });
+  next();
+});
+studentSchema.pre("findOne", function (next) {
+  this.findOne({ isDeleted: { $ne: true } });
+  next();
+});
+
+studentSchema.pre("aggregate", function (next) {
+  // Add the filter to exclude deleted documents
+  this.pipeline().unshift({ $match: { isDeleted: { $ne: true } } });
+  next();
+});
+
+const Student = model<TStudent, TStudentModel>("Student", studentSchema);
 export default Student;

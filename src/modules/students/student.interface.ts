@@ -1,3 +1,5 @@
+import { Model } from "mongoose";
+
 export type TGuardian = {
   fatherName: string;
   fatherOccupation: string;
@@ -16,12 +18,13 @@ export type TUserName = {
 export type TLocalGuardian = {
   name: string;
   occupation: string;
-  contact: string;
+  contactNo: string;
   address: string;
 };
 
 export interface TStudent {
   id: string;
+  password: string;
   name: TUserName;
   email: string;
   gender: "male" | "female";
@@ -35,4 +38,12 @@ export interface TStudent {
   localGuardian: TLocalGuardian;
   profileImage?: string;
   isActive: "active" | "blocked";
+  isDeleted: boolean;
 }
+
+//Custom instance method for check is the user already exists
+export type TStudentMethods = {
+  isUserExist(id: string): Promise<TStudent | null>;
+};
+
+export type TStudentModel = Model<TStudent, {}, TStudentMethods>;
