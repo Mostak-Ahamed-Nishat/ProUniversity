@@ -67,7 +67,7 @@ const localGuardianValidationSchema = z.object({
 });
 
 // Student Schema
-const createStudentValidationSchema = z.object({
+export const createStudentValidationSchema = z.object({
   body: z.object({
     password: z
       .string()
@@ -112,8 +112,3 @@ const createStudentValidationSchema = z.object({
     }),
   }),
 });
-
-// Export the schema for validation
-export const studentValidations = {
-  studentValidationSchema: createStudentValidationSchema,
-};

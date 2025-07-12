@@ -77,10 +77,13 @@ const studentSchema = new Schema<TStudent, TStudentModel, TStudentMethods>(
       type: String,
       required: true,
     },
-    password: {
-      type: String,
-      required: true,
+    user: {
+      type: Schema.Types.ObjectId,
+      required: [true, "User id is required"],
+      unique: true,
+      ref: "User",
     },
+
     gender: {
       type: String,
       enum: ["male", "female", "other"],
@@ -128,18 +131,10 @@ const studentSchema = new Schema<TStudent, TStudentModel, TStudentMethods>(
       required: true,
       trim: true,
     },
-
     guardian: guardianSchema,
-
     localGuardian: localGuardianSchema,
     profileImg: {
       type: String,
-    },
-
-    isActive: {
-      type: String,
-      enum: ["active", "blocked"],
-      default: "active",
     },
     isDeleted: {
       type: Boolean,
@@ -166,13 +161,6 @@ studentSchema.methods.isUserExist = async function (
 ): Promise<TStudent | null> {
   return await Student.findOne({ id });
 };
-
-//Pre save middleware
-studentSchema.pre("save", async function (next) {
-  const user = this;
-  user.password = await bcrypt.hash(user.password, Number(config.SALT_ROUNDS));
-  next();
-});
 
 //Query middleware to remove password from the response
 studentSchema.pre("find", function (next) {
