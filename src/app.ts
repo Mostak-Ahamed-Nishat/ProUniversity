@@ -1,7 +1,9 @@
-import express, { Application, Request, Response } from "express";
+import express, { Application, NextFunction, Request, Response } from "express";
 import cors from "cors";
 import { StudentRoutes } from "./modules/students/student.route";
 import { UsersRoutes } from "./modules/user/user.route";
+import globalErrorHandler from "./middlewares/globalErrorMiddleware";
+import notFoundErrorHandler from "./middlewares/notFoundErrorMiddleware";
 
 const app: Application = express();
 
@@ -20,17 +22,9 @@ app.use("/api/v1/students", StudentRoutes);
 app.use("/api/v1/users", UsersRoutes);
 
 // Handle Not Found Route
-app.use((req: Request, res: Response) => {
-  res.status(404).json({
-    success: false,
-    message: "Route Not Found",
-    errorMessages: [
-      {
-        path: req.path,
-        message: "API Not Found",
-      },
-    ],
-  });
-});
+app.use(notFoundErrorHandler);
+
+//Error Handler
+app.use(globalErrorHandler);
 
 export default app;

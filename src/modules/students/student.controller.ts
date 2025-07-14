@@ -1,8 +1,8 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { StudentServices } from "./student.service";
 
 // Get all students
-const getStudents = async (req: Request, res: Response) => {
+const getStudents = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const result = await StudentServices.getStudentsFromDB();
     return res.status(200).json({
@@ -11,15 +11,16 @@ const getStudents = async (req: Request, res: Response) => {
       data: result,
     });
   } catch (error: any) {
-    return res.status(500).json({
-      success: false,
-      message: error.message || "Failed to fetched students",
-    });
+    next(error);
   }
 };
 
 // Get student by id
-const getStudentById = async (req: Request, res: Response) => {
+const getStudentById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const { studentId } = req.params;
     const result = await StudentServices.getStudentFromDB(studentId);
@@ -30,16 +31,17 @@ const getStudentById = async (req: Request, res: Response) => {
       data: result,
     });
   } catch (error: any) {
-    return res.status(500).json({
-      success: false,
-      message: error.message || "Failed to fetched student by id",
-    });
+    next(error);
   }
 };
 
 //Delete student by id
 // Note: The function name is misleading; it should be renamed to getStudentById
-const deleteStudentById = async (req: Request, res: Response) => {
+const deleteStudentById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const { studentId } = req.params;
     const result = await StudentServices.deleteStudentFromDB(studentId);
@@ -50,10 +52,7 @@ const deleteStudentById = async (req: Request, res: Response) => {
       data: result,
     });
   } catch (error: any) {
-    return res.status(500).json({
-      success: false,
-      message: error.message || "Failed to fetched student by id",
-    });
+    next(error);
   }
 };
 
