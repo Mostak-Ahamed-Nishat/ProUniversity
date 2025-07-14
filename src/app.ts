@@ -4,6 +4,7 @@ import { StudentRoutes } from "./modules/students/student.route";
 import { UsersRoutes } from "./modules/user/user.route";
 import globalErrorHandler from "./middlewares/globalErrorMiddleware";
 import notFoundErrorHandler from "./middlewares/notFoundErrorMiddleware";
+import router from "./routes";
 
 const app: Application = express();
 
@@ -18,8 +19,7 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 //Applications Routes
-app.use("/api/v1/students", StudentRoutes);
-app.use("/api/v1/users", UsersRoutes);
+app.use("/api/v1", router);
 
 // Handle Not Found Route
 app.use(notFoundErrorHandler);
