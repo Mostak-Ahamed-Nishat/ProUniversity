@@ -68,47 +68,35 @@ const localGuardianValidationSchema = z.object({
 
 // Student Schema
 export const createStudentValidationSchema = z.object({
-  body: z.object({
-    password: z
-      .string()
-      .min(6, { message: "Password should be at least 6 character" }),
-    student: z.object({
-      name: userNameValidationSchema,
-      gender: z.enum(["female", "male"], {
-        errorMap: () => ({ message: "Gender must be 'male' or 'female'." }),
-      }),
-      isDeleted: z.boolean(),
-      email: z.string().trim().email({ message: "Invalid email address." }),
-      dateOfBirth: z.date().optional(),
-      contactNo: z // Changed from contactNumber to contactNo
-        .string()
-        .trim()
-        .regex(/^\d{10}$/, {
-          message: "Contact number must be a valid 10-digit number.",
-        }),
-      emergencyContactNo: z
-        .string()
-        .trim()
-        .regex(/^\d{10}$/, {
-          message: "Emergency contact number must be a valid 10-digit number.",
-        }),
-      bloodGroup: z.enum(["A+", "A", "B+", "B", "O+", "O", "AB+", "AB"], {
-        errorMap: (value) => ({
-          message: `${value} is not a valid blood group.`,
-        }),
-      }),
-      avatar: z.string().url().optional(),
-      guardian: guardianValidationSchema,
-      localGuardian: localGuardianValidationSchema,
-      permanentAddress: z
-        .string()
-        .trim()
-        .min(1, { message: "Permanent address is required." }),
-      presentAddress: z
-        .string()
-        .trim()
-        .min(1, { message: "Present address is required." }),
-      profileImage: z.string().url().optional(),
+  password: z
+    .string()
+    .min(6, { message: "Password should be at least 6 characters" }),
+  student: z.object({
+    name: userNameValidationSchema,
+    gender: z.enum(["female", "male"], {
+      errorMap: () => ({ message: "Gender must be 'male' or 'female'." }),
     }),
+    email: z.string().trim().email({ message: "Invalid email address." }),
+    dateOfBirth: z
+      .string()
+      .optional()
+      .transform((val) => (val ? new Date(val) : undefined)),
+    contactNumber: z
+      .string()
+      .trim()
+      .regex(/^\d{10}$/, {
+        message: "Contact number must be a valid 10-digit number.",
+      }),
+    emergencyContactNo: z
+      .string()
+      .trim()
+      .regex(/^\d{10}$/, {
+        message: "Emergency contact number must be a valid 10-digit number.",
+      }),
+    bloodGroup: z.enum(["A+", "A", "B+", "B", "O+", "O", "AB+", "AB"]),
+    guardian: guardianValidationSchema,
+    localGuardian: localGuardianValidationSchema,
+    permanentAddress: z.string().trim().min(1),
+    presentAddress: z.string().trim().min(1),
   }),
 });
