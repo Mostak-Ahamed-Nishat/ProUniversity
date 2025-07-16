@@ -19,7 +19,7 @@ const academicSemesterSchema = new Schema<TAcademicSemester>(
       required: true,
     },
     year: {
-      type: Date,
+      type: String,
       required: true,
     },
     startDate: {
@@ -38,6 +38,19 @@ const academicSemesterSchema = new Schema<TAcademicSemester>(
     versionKey: false,
   }
 );
+
+//Same semester can't be duplicate with that year !!
+academicSemesterSchema.pre("save", async function (next) {
+  const isSemesterExist = await AcademicSemester.findOne({
+    name: this.name,
+    year: this.year,
+  });
+
+  if (isSemesterExist) {
+    throw Error("Semester Already Exist!!");
+  }
+  next();
+});
 
 export const AcademicSemester = model<TAcademicSemester>(
   "AcademicSemester",
