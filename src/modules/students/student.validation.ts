@@ -77,10 +77,7 @@ export const createStudentValidationSchema = z.object({
       errorMap: () => ({ message: "Gender must be 'male' or 'female'." }),
     }),
     email: z.string().trim().email({ message: "Invalid email address." }),
-    dateOfBirth: z
-      .string()
-      .optional()
-      .transform((val) => (val ? new Date(val) : undefined)),
+    dateOfBirth: z.string().optional(),
     contactNumber: z
       .string()
       .trim()
@@ -93,6 +90,7 @@ export const createStudentValidationSchema = z.object({
       .regex(/^\d{10}$/, {
         message: "Emergency contact number must be a valid 10-digit number.",
       }),
+    admissionSemester: z.string(),
     bloodGroup: z.enum(["A+", "A", "B+", "B", "O+", "O", "AB+", "AB"]),
     guardian: guardianValidationSchema,
     localGuardian: localGuardianValidationSchema,

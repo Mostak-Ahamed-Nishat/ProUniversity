@@ -37,7 +37,7 @@ export interface TStudent {
   guardian: TLocalGuardian;
   localGuardian: TLocalGuardian;
   profileImage?: string;
-
+  admissionSemester: Types.ObjectId;
   isDeleted: boolean;
 }
 
