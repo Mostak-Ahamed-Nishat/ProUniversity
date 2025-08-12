@@ -136,10 +136,13 @@ const studentSchema = new Schema<TStudent, TStudentModel, TStudentMethods>(
     profileImg: {
       type: String,
     },
-
     admissionSemester: {
       type: Schema.Types.ObjectId,
       ref: "AcademicSemester",
+    },
+    academicDepartment: {
+      type: Schema.Types.ObjectId,
+      ref: "AcademicDepartment",
     },
     isDeleted: {
       type: Boolean,
@@ -172,6 +175,7 @@ studentSchema.pre("find", function (next) {
   this.find({ isDeleted: { $ne: true } });
   next();
 });
+
 studentSchema.pre("findOne", function (next) {
   this.findOne({ isDeleted: { $ne: true } });
   next();
