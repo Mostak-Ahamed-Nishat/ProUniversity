@@ -176,6 +176,11 @@ studentSchema.pre("find", function (next) {
   next();
 });
 
+studentSchema.pre("findOneAndUpdate", function (next) {
+  this.setQuery({ ...this.getQuery(), isDeleted: { $ne: true } });
+  next();
+});
+
 studentSchema.pre("findOne", function (next) {
   this.findOne({ isDeleted: { $ne: true } });
   next();
