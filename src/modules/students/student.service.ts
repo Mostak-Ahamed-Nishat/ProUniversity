@@ -82,8 +82,49 @@ const deleteStudentFromDB = async (id: string) => {
   }
 };
 
+const updateStudentInDB = async (id: string, payload: Partial<TStudent>) => {
+  const { name, guardian, localGuardian, ...remainingStudentData } = payload;
+
+  const modifiedUpdatedData: Record<string, unknown> = {
+    ...remainingStudentData,
+  };
+
+  if (name && Object.keys(name).length > 0) {
+    for (const [key, value] of Object.entries(name)) {
+      modifiedUpdatedData[`name.${key}`] = value;
+    }
+  }
+
+  if (guardian && Object.keys(guardian).length > 0) {
+    for (const [key, value] of Object.entries(guardian)) {
+      modifiedUpdatedData[`guardian.${key}`] = value;
+    }
+  }
+
+  if (localGuardian && Object.keys(localGuardian).length > 0) {
+    for (const [key, value] of Object.entries(localGuardian)) {
+      modifiedUpdatedData[`localGuardian.${key}`] = value;
+    }
+  }
+
+  try {
+    const result = await Student.findOneAndUpdate({ id }, modifiedUpdatedData, {
+      new: true,
+      runValidators: true,
+    });
+
+    if (!result) {
+      throw new Error("Student not found");
+    }
+    return result;
+  } catch (error) {
+    throw new AppError(500, "Failed to update student");
+  }
+};
+
 export const StudentServices = {
   getStudentsFromDB,
   getStudentFromDB,
   deleteStudentFromDB,
+  updateStudentInDB,
 };

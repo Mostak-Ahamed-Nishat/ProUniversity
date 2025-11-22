@@ -98,3 +98,38 @@ export const createStudentValidationSchema = z.object({
     presentAddress: z.string().trim().min(1),
   }),
 });
+
+export const updateStudentValidationSchema = z.object({
+  name: userNameValidationSchema.partial().optional(),
+  gender: z
+    .enum(["female", "male"], {
+      errorMap: () => ({ message: "Gender must be 'male' or 'female'." }),
+    })
+    .optional(),
+  email: z
+    .string()
+    .trim()
+    .email({ message: "Invalid email address." })
+    .optional(),
+  dateOfBirth: z.string().optional(),
+  contactNumber: z
+    .string()
+    .trim()
+    .regex(/^\d{10}$/, {
+      message: "Contact number must be a valid 10-digit number.",
+    })
+    .optional(),
+  emergencyContactNo: z
+    .string()
+    .trim()
+    .regex(/^\d{10}$/, {
+      message: "Emergency contact number must be a valid 10-digit number.",
+    })
+    .optional(),
+  admissionSemester: z.string().optional(),
+  bloodGroup: z.enum(["A+", "A", "B+", "B", "O+", "O", "AB+", "AB"]).optional(),
+  guardian: guardianValidationSchema.partial().optional(),
+  localGuardian: localGuardianValidationSchema.partial().optional(),
+  permanentAddress: z.string().trim().min(1).optional(),
+  presentAddress: z.string().trim().min(1).optional(),
+});
